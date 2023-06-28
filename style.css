@@ -1,0 +1,22 @@
+body {
+  display: grid;
+  justify-content: center;
+  text-align: center;
+}
+
+.gameboard-container {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+  height: 300px;
+  width: 300px;
+  margin-top: 40px;
+}
+
+.row1, .row2 {
+  border-bottom: 2px solid black;
+}
+
+.col1, .col2 {
+  border-right: 2px solid black;
+}
