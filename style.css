@@ -2,6 +2,11 @@ body {
   display: grid;
   justify-content: center;
   text-align: center;
+  font-family: 'Lato', sans-serif;
+}
+
+h1 {
+  font-size: 42px;
 }
 
 .gameboard-container {
@@ -19,4 +24,17 @@ body {
 
 .col1, .col2 {
   border-right: 2px solid black;
+}
+
+.gameboard-container div {
+  font-size: 50px;
+  font-weight: 900;
+  display: grid;
+  align-items: center;
+}
+
+.turn {
+  /* margin-top: 30px; */
+  font-size: 28px;
+  height: 30px;
 }
