@@ -24,7 +24,6 @@ function Player(playerOneName, playerTwoName) {
 
     const getInactivePlayer = () => inactivePlayer;
 
-    
     return {
       getActivePlayer,
       getInactivePlayer,
@@ -33,16 +32,63 @@ function Player(playerOneName, playerTwoName) {
     };
 };
 
-const Gameboard = (() => {
-  const player = Player('Treya', 'Beau');
+const StartGame = () => {
+  const playerForm = document.querySelector('.create-players');
+  const turnAnnouncer = document.querySelector('.turn');
+  const gameboard = document.querySelector('.gameboard-container');
+  const newGame = document.querySelector('.new-game');
+
+  const playerOneName = document.querySelector('#player-one').value;
+  const playerTwoName = document.querySelector('#player-two').value;
+  const playerButton = document.querySelector('.submit-players');
+  playerButton.addEventListener('click', () => {
+    if (playerOneName != "" && playerTwoName != "") {
+      Player(playerOneName, playerTwoName);
+      playerForm.classList.add('hidden');
+      turnAnnouncer.classList.remove('hidden');
+      gameboard.classList.remove('hidden');
+      newGame.classList.remove('hidden');
+      Gameboard();
+    }
+  })
+
+  newGame.addEventListener('click', () => {
+    document.querySelector('#player-one').value = "";
+    document.querySelector('#player-two').value = "";
+    playerForm.classList.remove('hidden');
+    turnAnnouncer.classList.add('hidden');
+    gameboard.classList.add('hidden');
+    newGame.classList.add('hidden');
+    Gameboard();
+  })
+
+  return {playerOneName, playerTwoName};
+}; 
+StartGame();
+
+// const NewGame = () => {
+//   const newGame = document.querySelector('.new-game');
+//   newGame.addEventListener('click', () => {
+//     document.querySelector('#player-one').value = "";
+//     document.querySelector('#player-two').value = "";
+//     playerForm.classList.remove('hidden');
+//     turnAnnouncer.classList.add('hidden');
+//     gameboard.classList.add('hidden');
+//     newGame.classList.add('hidden');
+//   })
+// }
+// NewGame();
+
+const Gameboard = () => {
+  const playerOneName = StartGame().playerOneName;
+  const playerTwoName = StartGame().playerTwoName;
+  const player = Player(playerOneName, playerTwoName);
   const playerTurn = document.querySelector('.turn');
   const gameboard = document.querySelectorAll('.space');
   let counter = 0;
 
   playerTurn.textContent = `${player.getActivePlayer().name}'s turn: ${player.getActivePlayer().token}`;
   
-  
-
   const checkForWinner = () => {
     let winner = "";
     //row 1 check
@@ -92,12 +138,6 @@ const Gameboard = (() => {
       playerTurn.textContent = `🎉 ${player.getInactivePlayer().name} won! 🎉`;
       return winner = player.getInactivePlayer().name;
     }
-
-    // if (counter === 9) {
-    //   playerTurn.textContent = "That's a tie!"
-    //   return winner = 'tie';
-    // }
-
     return winner;
   }
 
@@ -106,24 +146,21 @@ const Gameboard = (() => {
       if (checkForWinner() !== "") {
           gameboard[index].textContent = "";
       } else {
-        
         if (counter < 9) {
-        gameboard[index].setAttribute('data-token', player.getActivePlayer().token);
-        playerTurn.textContent = `${player.getInactivePlayer().name}'s turn: ${player.getInactivePlayer().token}`;
-        gameboard[index].textContent = player.getActivePlayer().token;
-        player.switchPlayerTurn();
-        checkForWinner();
-        counter++;
+          gameboard[index].setAttribute('data-token', player.getActivePlayer().token);
+          playerTurn.textContent = `${player.getInactivePlayer().name}'s turn: ${player.getInactivePlayer().token}`;
+          gameboard[index].textContent = player.getActivePlayer().token;
+          player.switchPlayerTurn();
+          checkForWinner();
+          counter++;
         } 
         if (counter === 9 && checkForWinner() === "") {
           player.switchPlayerTurn();
           gameboard[index].setAttribute('data-token', player.getActivePlayer().token);
           gameboard[index].textContent = player.getActivePlayer().token;
-          
           playerTurn.textContent = "That's a tie!"
         }
       }
     }, {once: true});
-    
   })
-})();
+};
