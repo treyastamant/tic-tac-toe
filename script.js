@@ -38,10 +38,13 @@ const StartGame = () => {
   const gameboard = document.querySelector('.gameboard-container');
   const newGame = document.querySelector('.new-game');
 
-  const playerOneName = document.querySelector('#player-one').value;
-  const playerTwoName = document.querySelector('#player-two').value;
+  let playerOneName = document.querySelector('#player-one').value;
+  let playerTwoName = document.querySelector('#player-two').value;
+
   const playerButton = document.querySelector('.submit-players');
   playerButton.addEventListener('click', () => {
+    playerOneName = document.querySelector('#player-one').value;
+    playerTwoName = document.querySelector('#player-two').value;
     if (playerOneName != "" && playerTwoName != "") {
       Player(playerOneName, playerTwoName);
       playerForm.classList.add('hidden');
@@ -65,19 +68,6 @@ const StartGame = () => {
   return {playerOneName, playerTwoName};
 }; 
 StartGame();
-
-// const NewGame = () => {
-//   const newGame = document.querySelector('.new-game');
-//   newGame.addEventListener('click', () => {
-//     document.querySelector('#player-one').value = "";
-//     document.querySelector('#player-two').value = "";
-//     playerForm.classList.remove('hidden');
-//     turnAnnouncer.classList.add('hidden');
-//     gameboard.classList.add('hidden');
-//     newGame.classList.add('hidden');
-//   })
-// }
-// NewGame();
 
 const Gameboard = () => {
   const playerOneName = StartGame().playerOneName;
