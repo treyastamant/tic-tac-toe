@@ -64,6 +64,7 @@ const StartGame = () => {
     newGame.classList.add('hidden');
     Gameboard();
   })
+  console.log('hey')
 
   return {playerOneName, playerTwoName};
 }; 
@@ -76,6 +77,13 @@ const Gameboard = () => {
   const playerTurn = document.querySelector('.turn');
   const gameboard = document.querySelectorAll('.space');
   let counter = 0;
+
+  //refresh gameboard
+  gameboard.forEach((e, index) => {
+    e.textContent = "";
+    e.setAttribute('data-token', index);
+  })
+
 
   playerTurn.textContent = `${player.getActivePlayer().name}'s turn: ${player.getActivePlayer().token}`;
   
@@ -131,23 +139,23 @@ const Gameboard = () => {
     return winner;
   }
 
-  gameboard.forEach(function (element, index) {
+  gameboard.forEach(function (element) {
     element.addEventListener('click', function addClickEvent() {
       if (checkForWinner() !== "") {
-          gameboard[index].textContent = "";
+          element.textContent = "";
       } else {
         if (counter < 9) {
-          gameboard[index].setAttribute('data-token', player.getActivePlayer().token);
+          element.setAttribute('data-token', player.getActivePlayer().token);
           playerTurn.textContent = `${player.getInactivePlayer().name}'s turn: ${player.getInactivePlayer().token}`;
-          gameboard[index].textContent = player.getActivePlayer().token;
+          element.textContent = player.getActivePlayer().token;
           player.switchPlayerTurn();
           checkForWinner();
           counter++;
         } 
         if (counter === 9 && checkForWinner() === "") {
           player.switchPlayerTurn();
-          gameboard[index].setAttribute('data-token', player.getActivePlayer().token);
-          gameboard[index].textContent = player.getActivePlayer().token;
+          element.setAttribute('data-token', player.getActivePlayer().token);
+          element.textContent = player.getActivePlayer().token;
           playerTurn.textContent = "That's a tie!"
         }
       }
