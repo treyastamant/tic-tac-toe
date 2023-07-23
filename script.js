@@ -1,13 +1,13 @@
 //Player object store players
-function Player(playerOneName, playerTwoName) {
+const Player = () => {
 
     const players = [
       {
-        name: playerOneName,
+        name: document.querySelector('#player-one').value,
         token: "X"
       },
       {
-        name: playerTwoName,
+        name: document.querySelector('#player-two').value,
         token: "O"
       }
     ];
@@ -32,115 +32,73 @@ function Player(playerOneName, playerTwoName) {
     };
 };
 
-const StartGame = () => {
+const Game = (() => {
+  
   const playerForm = document.querySelector('.create-players');
   const turnAnnouncer = document.querySelector('.turn');
-  const gameboard = document.querySelector('.gameboard-container');
-  const newGame = document.querySelector('.new-game');
-
-  let playerOneName = document.querySelector('#player-one').value;
-  let playerTwoName = document.querySelector('#player-two').value;
-
+  const gameboardContainer = document.querySelector('.gameboard-container');
+  const newGameBtn = document.querySelector('.new-game');
   const playerButton = document.querySelector('.submit-players');
-  playerButton.addEventListener('click', () => {
-    playerOneName = document.querySelector('#player-one').value;
-    playerTwoName = document.querySelector('#player-two').value;
-    if (playerOneName != "" && playerTwoName != "") {
-      Player(playerOneName, playerTwoName);
+
+  // let playerOneName = "Player One";
+  // let playerTwoName = "Player Two";
+
+  // console.log(playerOneName)
+  //start game on button click
+  const startGame = () => {
+    Player();
+    
+    if (document.querySelector('#player-one').value != "" && document.querySelector('#player-two').value != "") {
+      // console.log(playerOneName, playerTwoName)
       playerForm.classList.add('hidden');
       turnAnnouncer.classList.remove('hidden');
-      gameboard.classList.remove('hidden');
-      newGame.classList.remove('hidden');
-      Gameboard();
+      gameboardContainer.classList.remove('hidden');
+      newGameBtn.classList.remove('hidden');
+      // Gameboard.refreshGameboard();
+      Gameboard.gameController();
+      // Gameboard.checkForWinner();
     }
-  })
-
-  newGame.addEventListener('click', () => {
-    document.querySelector('#player-one').value = "";
-    document.querySelector('#player-two').value = "";
-    playerForm.classList.remove('hidden');
-    turnAnnouncer.classList.add('hidden');
-    gameboard.classList.add('hidden');
-    newGame.classList.add('hidden');
-    Gameboard();
-  })
-  console.log('hey')
-
-  return {playerOneName, playerTwoName};
-}; 
-StartGame();
-
-const Gameboard = () => {
-  const playerOneName = StartGame().playerOneName;
-  const playerTwoName = StartGame().playerTwoName;
-  const player = Player(playerOneName, playerTwoName);
-  const playerTurn = document.querySelector('.turn');
-  const gameboard = document.querySelectorAll('.space');
-  let counter = 0;
-
-  //refresh gameboard
-  gameboard.forEach((e, index) => {
-    e.textContent = "";
-    e.setAttribute('data-token', index);
-  })
-
-
-  playerTurn.textContent = `${player.getActivePlayer().name}'s turn: ${player.getActivePlayer().token}`;
-  
-  const checkForWinner = () => {
-    let winner = "";
-    //row 1 check
-    if (gameboard[0].dataset.token === gameboard[1].dataset.token  && gameboard[1].dataset.token === gameboard[2].dataset.token) {
-      playerTurn.textContent = `🎉 ${player.getInactivePlayer().name} won! 🎉`;
-      return winner = player.getInactivePlayer().name;
-    }
-
-    //row 2 check
-    if (gameboard[3].dataset.token === gameboard[4].dataset.token && gameboard[4].dataset.token === gameboard[5].dataset.token) {
-      playerTurn.textContent = `🎉 ${player.getInactivePlayer().name} won! 🎉`;
-      return winner = player.getInactivePlayer().name;
-    }
-
-    //row 3 check 
-    if (gameboard[6].dataset.token === gameboard[7].dataset.token && gameboard[7].dataset.token === gameboard[8].dataset.token) {
-      playerTurn.textContent = `🎉 ${player.getInactivePlayer().name} won! 🎉`;
-      return winner = player.getInactivePlayer().name;
-    }
-
-    //col 1 check 
-    if (gameboard[0].dataset.token === gameboard[3].dataset.token && gameboard[3].dataset.token === gameboard[6].dataset.token) {
-      playerTurn.textContent = `🎉 ${player.getInactivePlayer().name} won! 🎉`;
-      return winner = player.getInactivePlayer().name;
-    }
-
-    //col 2 check
-    if (gameboard[1].dataset.token === gameboard[4].dataset.token && gameboard[4].dataset.token === gameboard[7].dataset.token) {
-      playerTurn.textContent = `🎉 ${player.getInactivePlayer().name} won! 🎉`;
-      return winner = player.getInactivePlayer().name;
-    }
-
-    //col 3 check 
-    if (gameboard[2].dataset.token === gameboard[5].dataset.token && gameboard[5].dataset.token === gameboard[8].dataset.token) {
-      playerTurn.textContent = `🎉 ${player.getInactivePlayer().name} won! 🎉`;
-      return winner = player.getInactivePlayer().name;
-    }
-
-    //dia 1 check
-    if (gameboard[0].dataset.token === gameboard[4].dataset.token && gameboard[4].dataset.token === gameboard[8].dataset.token) {
-      playerTurn.textContent = `🎉 ${player.getInactivePlayer().name} won! 🎉`;
-      return winner = player.getInactivePlayer().name;
-    }
-
-    //dia 2 check
-    if (gameboard[2].dataset.token === gameboard[4].dataset.token && gameboard[4].dataset.token === gameboard[6].dataset.token) {
-      playerTurn.textContent = `🎉 ${player.getInactivePlayer().name} won! 🎉`;
-      return winner = player.getInactivePlayer().name;
-    }
-    return winner;
   }
 
-  gameboard.forEach(function (element) {
-    element.addEventListener('click', function addClickEvent() {
+  playerButton.addEventListener('click', startGame);
+
+  //new game on button click
+  newGameBtn.addEventListener('click', () => {
+      document.querySelector('#player-one').value = "";
+      document.querySelector('#player-two').value = "";
+      playerForm.classList.remove('hidden');
+      turnAnnouncer.classList.add('hidden');
+      gameboardContainer.classList.add('hidden');
+      newGameBtn.classList.add('hidden');
+      Gameboard.refreshGameboard();
+      // Gameboard.gameController();
+      // Gameboard.checkForWinner();
+    })
+
+    // return {
+    //   // playerOneName,
+    //   // playerTwoName,
+    //   startGame
+    // }
+})();
+
+const Gameboard = (() => {
+  
+  const playerTurn = document.querySelector('.turn');
+  const space = document.querySelectorAll('.space');
+  let counter = 0;
+
+  const refreshGameboard = () => {
+    space.forEach((e, index) => {
+      e.textContent = "";
+      e.setAttribute('data-token', index);
+      e.removeEventListener('click', turnControl);
+    })
+  }
+
+  const turnControl = () => {
+    let player = Player();
+    space.forEach(function (element) {
       if (checkForWinner() !== "") {
           element.textContent = "";
       } else {
@@ -151,6 +109,7 @@ const Gameboard = () => {
           player.switchPlayerTurn();
           checkForWinner();
           counter++;
+          console.log(counter);
         } 
         if (counter === 9 && checkForWinner() === "") {
           player.switchPlayerTurn();
@@ -159,6 +118,82 @@ const Gameboard = () => {
           playerTurn.textContent = "That's a tie!"
         }
       }
-    }, {once: true});
-  })
-};
+    })
+  }
+  
+  
+
+  const gameController = () => {
+    let player = Player();
+    counter = 0;
+
+    playerTurn.textContent = `${player.getActivePlayer().name}'s turn: ${player.getActivePlayer().token}`;
+
+    space.forEach(function (element) {
+      element.addEventListener('click', turnControl, {once: true});
+    })
+    
+      
+      
+  }
+
+  const checkForWinner = () => {
+    console.log("check for winner run")
+    let player = Player();
+    let winner = "";
+    //row 1 check
+    if (space[0].dataset.token === space[1].dataset.token  && space[1].dataset.token === space[2].dataset.token) {
+      playerTurn.textContent = `🎉 ${player.getInactivePlayer().name} won! 🎉`;
+      return winner = player.getInactivePlayer().name;
+    }
+
+    //row 2 check
+    if (space[3].dataset.token === space[4].dataset.token && space[4].dataset.token === space[5].dataset.token) {
+      playerTurn.textContent = `🎉 ${player.getInactivePlayer().name} won! 🎉`;
+      return winner = player.getInactivePlayer().name;
+    }
+
+    //row 3 check 
+    if (space[6].dataset.token === space[7].dataset.token && space[7].dataset.token === space[8].dataset.token) {
+      playerTurn.textContent = `🎉 ${player.getInactivePlayer().name} won! 🎉`;
+      return winner = player.getInactivePlayer().name;
+    }
+
+    //col 1 check 
+    if (space[0].dataset.token === space[3].dataset.token && space[3].dataset.token === space[6].dataset.token) {
+      playerTurn.textContent = `🎉 ${player.getInactivePlayer().name} won! 🎉`;
+      return winner = player.getInactivePlayer().name;
+    }
+
+    //col 2 check
+    if (space[1].dataset.token === space[4].dataset.token && space[4].dataset.token === space[7].dataset.token) {
+      playerTurn.textContent = `🎉 ${player.getInactivePlayer().name} won! 🎉`;
+      return winner = player.getInactivePlayer().name;
+    }
+
+    //col 3 check 
+    if (space[2].dataset.token === space[5].dataset.token && space[5].dataset.token === space[8].dataset.token) {
+      playerTurn.textContent = `🎉 ${player.getInactivePlayer().name} won! 🎉`;
+      return winner = player.getInactivePlayer().name;
+    }
+
+    //dia 1 check
+    if (space[0].dataset.token === space[4].dataset.token && space[4].dataset.token === space[8].dataset.token) {
+      playerTurn.textContent = `🎉 ${player.getInactivePlayer().name} won! 🎉`;
+      return winner = player.getInactivePlayer().name;
+    }
+
+    //dia 2 check
+    if (space[2].dataset.token === space[4].dataset.token && space[4].dataset.token === space[6].dataset.token) {
+      playerTurn.textContent = `🎉 ${player.getInactivePlayer().name} won! 🎉`;
+      return winner = player.getInactivePlayer().name;
+    }
+    return winner;
+  }
+
+  return {
+    refreshGameboard,
+    checkForWinner,
+    gameController
+  }
+})();
