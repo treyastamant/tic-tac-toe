@@ -6,6 +6,7 @@ const createPlayer = (name, token) => {
 //gameBoard object
 const gameBoard = (() => {
   const container = document.querySelector('.gameboard-container');
+  const turnMessage = document.querySelector(".turn");
   let board = []
 
   const createBoard = () => {
@@ -17,16 +18,17 @@ const gameBoard = (() => {
       cell.setAttribute('id', i)
       let board = document.querySelectorAll('.cell');
       cell.addEventListener('click', () => {
-        cell.textContent = cell.id;   
-        console.log(gameFlow.getActivePlayer());
-        console.log(gameFlow.getInactivePlayer()); 
-        gameFlow.switchPlayerTurn(); 
+         
+        // console.log(gameFlow.getActivePlayer());
+        // console.log(gameFlow.getInactivePlayer());
+         
+        turnMessage.textContent = `${gameFlow.getInactivePlayer().name}'s turn: ${gameFlow.getInactivePlayer().token}`;
+        cell.textContent = gameFlow.getActivePlayer().token;  
+        gameFlow.switchPlayerTurn();
         console.log(board)
       }, {once:true})
     }
   }
-  
-  
   
   const startGame = document.querySelector('.new-game');
   startGame.addEventListener('click', () => {
@@ -34,6 +36,9 @@ const gameBoard = (() => {
     board = [];
     createBoard();
     console.log(board)
+    turnMessage.classList.remove('hidden');
+    turnMessage.textContent = `${gameFlow.getActivePlayer().name}'s turn: ${gameFlow.getActivePlayer().token}`;
+
   })
   })();
 
