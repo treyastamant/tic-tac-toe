@@ -13,12 +13,12 @@ const gameBoard = (() => {
       board.push(i);
       const cell = document.createElement('div');
       container.appendChild(cell);
-      cell.className = i;
+      cell.classList.add(i, "cell");
       cell.addEventListener('click', () => {
         cell.textContent = cell.className;   
-        console.log(gameFlow().getActivePlayer());
-        console.log(gameFlow().getInactivePlayer()); 
-        gameFlow().switchPlayerTurn(); 
+        console.log(gameFlow.getActivePlayer());
+        console.log(gameFlow.getInactivePlayer()); 
+        gameFlow.switchPlayerTurn(); 
       }, {once:true})
     }
   }
@@ -32,7 +32,7 @@ const gameBoard = (() => {
   })
   })();
 
-  const gameFlow = () => {
+  const gameFlow = (() => {
     const playerOne = createPlayer('Treya', 'X');
     const playerTwo = createPlayer('Cameron', 'O');
 
@@ -53,7 +53,7 @@ const gameBoard = (() => {
       getInactivePlayer,
       switchPlayerTurn
     };
-  }
+  })();
 
 // //Player object store players
 // const Player = () => {
