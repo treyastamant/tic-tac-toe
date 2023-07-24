@@ -18,19 +18,25 @@ const gameBoard = (() => {
       cell.className = "cell";
       cell.setAttribute('id', i)
       cell.addEventListener('click', () => {
-        if (gameFlow.getActivePlayer().token === "X") {
-          xCells.push(Number(cell.id))
+        if (gameFlow.checkWinner().winner === "") {
+          if (gameFlow.getActivePlayer().token === "X") {
+            xCells.push(Number(cell.id))
+          }
+          if (gameFlow.getActivePlayer().token === "O") {
+            oCells.push(Number(cell.id))
+          }
+          board.push(cell.id) 
+          turnMessage.textContent = `${gameFlow.getInactivePlayer().name}'s turn: ${gameFlow.getInactivePlayer().token}`;
+          cell.textContent = gameFlow.getActivePlayer().token;  
+          gameFlow.switchPlayerTurn();
         }
-        if (gameFlow.getActivePlayer().token === "O") {
-          oCells.push(Number(cell.id))
+        //check for winner
+        if (gameFlow.checkWinner().winner === "X") {
+          turnMessage.textContent = gameFlow.playerOne.name + ' Wins!!';
         }
-        gameFlow.checkWinner();
-        board.push(cell.id) 
-        turnMessage.textContent = `${gameFlow.getInactivePlayer().name}'s turn: ${gameFlow.getInactivePlayer().token}`;
-        cell.textContent = gameFlow.getActivePlayer().token;  
-        gameFlow.switchPlayerTurn();
-        
-        
+        if (gameFlow.checkWinner().winner === "O") {
+          turnMessage.textContent = gameFlow.playerTwo.name + ' Wins!!';
+        }
       }, {once:true})
     }
   }
@@ -76,13 +82,38 @@ const gameBoard = (() => {
     }
 
     const checkWinner = () => {
-      console.log('check winner')
-      console.log('O', gameBoard.oCells)
-      console.log('X', gameBoard.xCells)
-      if (gameBoard.xCells.includes(1, 2, 3 )) {
-        console.log("X wins")
+      let winner = "";
+      //winning conditions
+      const w1 = [1, 2, 3];
+      const w2 = [4, 5, 6];
+      const w3 = [7, 8, 9];
+      const w4 = [1, 4, 7];
+      const w5 = [2, 5, 8];
+      const w6 = [3, 6, 9];
+      const w7 = [1, 5, 9];
+      const w8 = [3, 5, 7];
+      if (w1.every(i => gameBoard.xCells.includes(i)) ||
+      w2.every(i => gameBoard.xCells.includes(i)) ||
+      w3.every(i => gameBoard.xCells.includes(i)) ||
+      w4.every(i => gameBoard.xCells.includes(i)) ||
+      w5.every(i => gameBoard.xCells.includes(i)) ||
+      w6.every(i => gameBoard.xCells.includes(i)) ||
+      w7.every(i => gameBoard.xCells.includes(i)) ||
+      w8.every(i => gameBoard.xCells.includes(i))) {
+        // console.log("X wins")
+        winner = 'X';
       }
-      
+      if (w1.every(i => gameBoard.oCells.includes(i)) ||
+      w2.every(i => gameBoard.oCells.includes(i)) ||
+      w3.every(i => gameBoard.oCells.includes(i)) ||
+      w4.every(i => gameBoard.oCells.includes(i)) ||
+      w5.every(i => gameBoard.oCells.includes(i)) ||
+      w6.every(i => gameBoard.oCells.includes(i)) ||
+      w7.every(i => gameBoard.oCells.includes(i)) ||
+      w8.every(i => gameBoard.oCells.includes(i))) {
+        winner = 'O';
+      }
+      return {winner}
     }
 
     return {
@@ -90,7 +121,9 @@ const gameBoard = (() => {
       getInactivePlayer,
       switchPlayerTurn,
       checkWinner,
-      resetPlayers
+      resetPlayers,
+      playerOne,
+      playerTwo
     };
   })();
 
