@@ -41,6 +41,7 @@ const gameBoard = (() => {
     xCells.length = 0;
     oCells.length = 0;
     createBoard();
+    gameFlow.resetPlayers();
     turnMessage.classList.remove('hidden');
     turnMessage.textContent = `${gameFlow.getActivePlayer().name}'s turn: ${gameFlow.getActivePlayer().token}`;
   })
@@ -55,9 +56,15 @@ const gameBoard = (() => {
   const gameFlow = (() => {
     const playerOne = createPlayer('Treya', 'X');
     const playerTwo = createPlayer('Cameron', 'O');
+    let activePlayer;
+    let inactivePlayer;
 
-    let activePlayer = playerOne;
-    let inactivePlayer = playerTwo;
+    const resetPlayers = () => {
+      activePlayer = playerOne;
+      inactivePlayer = playerTwo;
+
+      return activePlayer, inactivePlayer;
+    }
 
     const getActivePlayer = () => activePlayer;
 
@@ -82,7 +89,8 @@ const gameBoard = (() => {
       getActivePlayer,
       getInactivePlayer,
       switchPlayerTurn,
-      checkWinner
+      checkWinner,
+      resetPlayers
     };
   })();
 
