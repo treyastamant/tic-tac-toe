@@ -8,24 +8,29 @@ const gameBoard = (() => {
   const container = document.querySelector('.gameboard-container');
   const turnMessage = document.querySelector(".turn");
   let board = []
+  let xCells = []
+  let oCells = [];
 
   const createBoard = () => {
     for (i = 1; i < 10; i++) {
-      // board.push(i);
       const cell = document.createElement('div');
       container.appendChild(cell);
       cell.className = "cell";
       cell.setAttribute('id', i)
-      let board = document.querySelectorAll('.cell');
       cell.addEventListener('click', () => {
-         
-        // console.log(gameFlow.getActivePlayer());
-        // console.log(gameFlow.getInactivePlayer());
-         
+        if (gameFlow.getActivePlayer().token === "X") {
+          xCells.push(Number(cell.id))
+        }
+        if (gameFlow.getActivePlayer().token === "O") {
+          oCells.push(Number(cell.id))
+        }
+        gameFlow.checkWinner();
+        board.push(cell.id) 
         turnMessage.textContent = `${gameFlow.getInactivePlayer().name}'s turn: ${gameFlow.getInactivePlayer().token}`;
         cell.textContent = gameFlow.getActivePlayer().token;  
         gameFlow.switchPlayerTurn();
-        console.log(board)
+        
+        
       }, {once:true})
     }
   }
@@ -33,13 +38,18 @@ const gameBoard = (() => {
   const startGame = document.querySelector('.new-game');
   startGame.addEventListener('click', () => {
     container.innerHTML = "";
-    board = [];
+    xCells.length = 0;
+    oCells.length = 0;
     createBoard();
-    console.log(board)
     turnMessage.classList.remove('hidden');
     turnMessage.textContent = `${gameFlow.getActivePlayer().name}'s turn: ${gameFlow.getActivePlayer().token}`;
-
   })
+
+  return {
+    board,
+    xCells,
+    oCells
+  }
   })();
 
   const gameFlow = (() => {
@@ -58,10 +68,21 @@ const gameBoard = (() => {
       inactivePlayer = inactivePlayer === playerTwo ? playerOne : playerTwo;
     }
 
+    const checkWinner = () => {
+      console.log('check winner')
+      console.log('O', gameBoard.oCells)
+      console.log('X', gameBoard.xCells)
+      if (gameBoard.xCells.includes(1, 2, 3 )) {
+        console.log("X wins")
+      }
+      
+    }
+
     return {
       getActivePlayer,
       getInactivePlayer,
-      switchPlayerTurn
+      switchPlayerTurn,
+      checkWinner
     };
   })();
 
