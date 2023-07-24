@@ -18,6 +18,7 @@ const gameBoard = (() => {
       cell.className = "cell";
       cell.setAttribute('id', i)
       cell.addEventListener('click', () => {
+        console.log (board)
         if (gameFlow.checkWinner().winner === "") {
           if (gameFlow.getActivePlayer().token === "X") {
             xCells.push(Number(cell.id))
@@ -29,6 +30,9 @@ const gameBoard = (() => {
           turnMessage.textContent = `${gameFlow.getInactivePlayer().name}'s turn: ${gameFlow.getInactivePlayer().token}`;
           cell.textContent = gameFlow.getActivePlayer().token;  
           gameFlow.switchPlayerTurn();
+        }
+        if (board.length === 9) {
+          turnMessage.textContent = "Tie Game"
         }
         //check for winner
         if (gameFlow.checkWinner().winner === "X") {
@@ -46,6 +50,7 @@ const gameBoard = (() => {
     container.innerHTML = "";
     xCells.length = 0;
     oCells.length = 0;
+    board.length = 0;
     createBoard();
     gameFlow.resetPlayers();
     turnMessage.classList.remove('hidden');
