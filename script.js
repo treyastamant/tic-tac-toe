@@ -6,24 +6,29 @@ const createPlayer = (name, token) => {
 //gameBoard object
 const gameBoard = (() => {
   const container = document.querySelector('.gameboard-container');
-  let board = [];
+  let board = []
 
   const createBoard = () => {
     for (i = 1; i < 10; i++) {
-      board.push(i);
+      // board.push(i);
       const cell = document.createElement('div');
       container.appendChild(cell);
-      cell.classList.add(i, "cell");
+      cell.className = "cell";
+      cell.setAttribute('id', i)
+      let board = document.querySelectorAll('.cell');
       cell.addEventListener('click', () => {
-        cell.textContent = cell.className;   
+        cell.textContent = cell.id;   
         console.log(gameFlow.getActivePlayer());
         console.log(gameFlow.getInactivePlayer()); 
         gameFlow.switchPlayerTurn(); 
+        console.log(board)
       }, {once:true})
     }
   }
-
-    const startGame = document.querySelector('.new-game');
+  
+  
+  
+  const startGame = document.querySelector('.new-game');
   startGame.addEventListener('click', () => {
     container.innerHTML = "";
     board = [];
