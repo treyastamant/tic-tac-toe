@@ -8,7 +8,10 @@ const gameBoard = (() => {
   const container = document.querySelector('.gameboard-container');
   const turnMessage = document.querySelector(".turn");
   const startGame = document.querySelector('.start-game');
+  const createPlayerForm = document.querySelector('.create-players');
   const newGame = document.querySelector('.new-game');
+  const playerOneInput = document.querySelector('#player-one');
+  const playerTwoInput = document.querySelector('#player-two');
   let board = []
   let xCells = []
   let oCells = [];
@@ -20,7 +23,6 @@ const gameBoard = (() => {
       cell.className = "cell";
       cell.setAttribute('id', i)
       cell.addEventListener('click', () => {
-        console.log (board)
         if (gameFlow.checkWinner().winner === "") {
           if (gameFlow.getActivePlayer().token === "X") {
             xCells.push(Number(cell.id))
@@ -34,37 +36,49 @@ const gameBoard = (() => {
           gameFlow.switchPlayerTurn();
         }
         if (board.length === 9) {
-          turnMessage.textContent = "Tie Game"
+          turnMessage.textContent = "🫱🏻‍🫲🏾 Tie Game 🫱🏾‍🫲🏻"
         }
         //check for winner
         if (gameFlow.checkWinner().winner === "X") {
-          turnMessage.textContent = gameFlow.playerOne.name + ' Wins!!';
+          turnMessage.textContent = '🎉 ' + gameFlow.getInactivePlayer().name + ' wins!! 🎉';
         }
         if (gameFlow.checkWinner().winner === "O") {
-          turnMessage.textContent = gameFlow.playerTwo.name + ' Wins!!';
+          turnMessage.textContent = '🎉 ' + gameFlow.getInactivePlayer().name + ' wins!! 🎉';
         }
       }, {once:true})
     }
   }
   
+  //start game btn
   startGame.addEventListener('click', () => {
-    createBoard();
-    gameFlow.resetPlayers();
-    turnMessage.classList.remove('hidden');
-    newGame.classList.remove('hidden');
-
-    turnMessage.textContent = `${gameFlow.getActivePlayer().name}'s turn: ${gameFlow.getActivePlayer().token}`;
+    if (playerOneInput.value != "" && playerTwoInput.value != "") {
+      xCells.length = 0;
+      oCells.length = 0;
+      board.length = 0;
+      createBoard();
+      gameFlow.createPlayers();
+      turnMessage.classList.remove('hidden');
+      newGame.classList.remove('hidden');
+      createPlayerForm.classList.add('hidden');
+      turnMessage.textContent = `${gameFlow.getActivePlayer().name}'s turn: ${gameFlow.getActivePlayer().token}`;
+    }
+    else {
+      playerOneInput.classList.add('empty');
+      playerTwoInput.classList.add('empty');
+    }
   })
 
+  //new game btn
   newGame.addEventListener('click', () => {
     container.innerHTML = "";
-    xCells.length = 0;
-    oCells.length = 0;
-    board.length = 0;
-    gameFlow.resetPlayers();
     turnMessage.classList.add('hidden');
     newGame.classList.add('hidden');
+    createPlayerForm.classList.remove('hidden');
     turnMessage.textContent = `${gameFlow.getActivePlayer().name}'s turn: ${gameFlow.getActivePlayer().token}`;
+    playerOneInput.value = "";
+    playerTwoInput.value = "";
+    playerOneInput.classList.remove('empty');
+    playerTwoInput.classList.remove('empty');
   })
 
   return {
@@ -75,10 +89,21 @@ const gameBoard = (() => {
   })();
 
   const gameFlow = (() => {
-    const playerOne = createPlayer('Treya', 'X');
-    const playerTwo = createPlayer('Cameron', 'O');
+    let playerOne;
+    let playerTwo;
     let activePlayer;
     let inactivePlayer;
+
+    const createPlayers = () => {
+    playerOne = createPlayer(document.querySelector('#player-one').value, "X");
+    playerTwo = createPlayer(document.querySelector('#player-two').value, 'O');
+
+    activePlayer = playerOne;
+    inactivePlayer = playerTwo;
+
+    return playerOne, playerTwo, activePlayer, inactivePlayer;
+
+    }
 
     const resetPlayers = () => {
       activePlayer = playerOne;
@@ -115,7 +140,6 @@ const gameBoard = (() => {
       w6.every(i => gameBoard.xCells.includes(i)) ||
       w7.every(i => gameBoard.xCells.includes(i)) ||
       w8.every(i => gameBoard.xCells.includes(i))) {
-        // console.log("X wins")
         winner = 'X';
       }
       if (w1.every(i => gameBoard.oCells.includes(i)) ||
@@ -138,7 +162,8 @@ const gameBoard = (() => {
       checkWinner,
       resetPlayers,
       playerOne,
-      playerTwo
+      playerTwo,
+      createPlayers
     };
   })();
 
