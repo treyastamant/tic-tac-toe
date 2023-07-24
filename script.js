@@ -41,9 +41,20 @@ const gameBoard = (() => {
         //check for winner
         if (gameFlow.checkWinner().winner === "X") {
           turnMessage.textContent = '🎉 ' + gameFlow.getInactivePlayer().name + ' wins!! 🎉';
+          turnMessage.classList.add('winner');
+          gameFlow.checkWinner().winningCells.forEach(element => {
+            let winningCells = document.getElementById(element);
+            winningCells.classList.add('winner');
+          });
         }
         if (gameFlow.checkWinner().winner === "O") {
           turnMessage.textContent = '🎉 ' + gameFlow.getInactivePlayer().name + ' wins!! 🎉';
+          turnMessage.classList.add('winner');
+          gameFlow.checkWinner().winningCells.forEach(element => {
+            let winningCells = document.getElementById(element);
+            winningCells.classList.add('winner');
+          });
+          
         }
       }, {once:true})
     }
@@ -73,6 +84,7 @@ const gameBoard = (() => {
     container.innerHTML = "";
     turnMessage.classList.add('hidden');
     newGame.classList.add('hidden');
+    turnMessage.classList.remove('winner');
     createPlayerForm.classList.remove('hidden');
     turnMessage.textContent = `${gameFlow.getActivePlayer().name}'s turn: ${gameFlow.getActivePlayer().token}`;
     playerOneInput.value = "";
@@ -123,6 +135,7 @@ const gameBoard = (() => {
 
     const checkWinner = () => {
       let winner = "";
+      let winningCells;
       //winning conditions
       const w1 = [1, 2, 3];
       const w2 = [4, 5, 6];
@@ -132,27 +145,24 @@ const gameBoard = (() => {
       const w6 = [3, 6, 9];
       const w7 = [1, 5, 9];
       const w8 = [3, 5, 7];
-      if (w1.every(i => gameBoard.xCells.includes(i)) ||
-      w2.every(i => gameBoard.xCells.includes(i)) ||
-      w3.every(i => gameBoard.xCells.includes(i)) ||
-      w4.every(i => gameBoard.xCells.includes(i)) ||
-      w5.every(i => gameBoard.xCells.includes(i)) ||
-      w6.every(i => gameBoard.xCells.includes(i)) ||
-      w7.every(i => gameBoard.xCells.includes(i)) ||
-      w8.every(i => gameBoard.xCells.includes(i))) {
-        winner = 'X';
-      }
-      if (w1.every(i => gameBoard.oCells.includes(i)) ||
-      w2.every(i => gameBoard.oCells.includes(i)) ||
-      w3.every(i => gameBoard.oCells.includes(i)) ||
-      w4.every(i => gameBoard.oCells.includes(i)) ||
-      w5.every(i => gameBoard.oCells.includes(i)) ||
-      w6.every(i => gameBoard.oCells.includes(i)) ||
-      w7.every(i => gameBoard.oCells.includes(i)) ||
-      w8.every(i => gameBoard.oCells.includes(i))) {
-        winner = 'O';
-      }
-      return {winner}
+
+      const winningConditions = [w1, w2, w3, w4, w5, w6, w7, w8];
+
+      winningConditions.forEach(element => {
+        if (element.every(i => gameBoard.xCells.includes(i))) {
+          winner = 'X';
+          winningCells = element;
+        }
+      });
+
+      winningConditions.forEach(element => {
+        if (element.every(i => gameBoard.oCells.includes(i))) {
+          winner = 'O';
+          winningCells = element;
+        }
+      });
+
+      return {winner, winningCells}
     }
 
     return {
